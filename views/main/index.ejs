@@ -1,0 +1,86 @@
+
+<h1>Code Chat</h1>
+<% if(req.session.user) {%>
+<p>Welcome , <%= (req.session.user['username']) %> You are signed in .</p>
+<a href="/chat">Go to chat</a>
+<% }else {%>
+<div>
+  <h3>Sign In</h3>
+	<input type="text" id="loginName" placeholder="Username" />
+	<input type="password" id="loginPassword" placeholder="Password" />
+	<button id="loginButton">Sign In</button>
+</div>
+
+<div>
+	<h3>Sign Up</h3>
+	<input type="text" id="signupName" placeholder="name" />
+	<input type="password" id="signupPassword" placeholder="Password" />
+	<input type="password" id="signupConfirmPassword" placeholder="Confirm Password" />
+	<button id="signupButton">Sign Up</button>
+</div>
+<% } %>
+
+<h3>List all users</h3>
+<% _.each(user , function(u) { %>
+	
+	<p><%= u.username%> : <%= u.password%></p>
+
+<% }) %>
+<script>
+	$("#loginButton").on('click' , function(){
+
+		var username = $("#loginName").val();
+		var password = $("#loginPassword").val();
+
+		console.log(username +" "+ password);
+
+		if(username && password)
+		{
+			$.post(
+				'/login' , 
+				{ username: username , password: password },
+				function(){
+					console.log("Login success");
+					//window.location.href = '/chat';
+				}
+				).
+			fail(function(res){
+				console.log('Error: '+res.getResponseHeader("error"));
+			});
+		}else 
+		{
+			console.log('Lack of username or password');
+		}
+	});
+
+	$("#signupButton").on('click' , function(){
+		var username = $("#signupName").val();
+		var password = $('#signupPassword').val();
+		var confirmPassword = $("#signupConfirmPassword").val();
+
+		if(username && password)
+		{
+			if(password === confirmPassword)
+			{	
+				$.post(
+					'/signup' , 
+					{username: username,password: password} , 
+					function(){
+
+						console.log('Register success');
+						//window.location.href = '/chat';
+					}
+				).fail(function(res){
+					console.log('Error: '+res.getResponseHeader('error'));
+				});
+			}else
+			{
+				console.log('Password do not match');
+			}
+		}else
+		{
+			console.log('Lack of username or password');
+		}
+	});
+
+</script>

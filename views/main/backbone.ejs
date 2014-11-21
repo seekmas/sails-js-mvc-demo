@@ -1,0 +1,57 @@
+<script type="text/template" id="search_template">
+	<label><%= search_label %></label>
+	<input type="text" , id="search_input" />
+	<input type="button" id="search_button" value="Search" />
+</script>
+
+<div id="search_container"></div>
+
+<script>
+//Backbone Model
+// Person = Backbone.Model.extend({
+// 	urlRoot: '/messages' ,
+// 	defaults: {
+// 		userId: '' , 
+// 		username: '' , 
+// 		message: '' , 
+// 		createdAt: '' , 
+// 		updatedAt: ''
+// 	} , 
+// 	initialize: function(){
+// 		console.log('Person is initialized!');
+// 		this.on("change:message" , function(model){
+// 		});
+// 	}
+// });
+
+// var person = new Person({id: 1});
+// console.log(person.toJSON());
+// person.save({id: 1, userId: 1, username: "Helling" ,message: "New message"} , {
+// 	success: function(user) {
+// 		console.log(user.toJSON());
+// 	}
+// });
+//Backbone Model End
+
+//Backbone View 
+SearchView = Backbone.View.extend({
+	initialize: function(){
+		this.render();
+	},
+	render: function(){
+		var variables = { search_label: "My Search"}
+		var template  = _.template($("#search_template").html() , variables);
+		this.$el.html(template);
+	},
+	events: {
+		"click input[type=button]": "doSearch"
+	},
+	doSearch: function(event) {
+		console.log("Search for : "+$("#search_input").val());
+	}
+});
+
+var search_view = new SearchView({el: $("#search_container")});
+//Backbone View End
+
+</script>
